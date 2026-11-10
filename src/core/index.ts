@@ -411,7 +411,7 @@ export class App {
         });
     }
 
-    
+
     AjustarResolucion() {
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
@@ -1594,12 +1594,36 @@ export class App {
         if (this.mobileControlsContainer) this.mobileControlsContainer.style.display = 'none';
 
         this.uiContainer.innerHTML = `
-            <h1 style="color: #00ffff; font-size: 60px; text-shadow: 0 0 20px #00ffff; margin-bottom: 10px;">SPACE SHOOTER</h1>
+            <h1 style="color: #00ffff; 
+            font-size: clamp(28px, 7vw, 60px);
+            text-shadow: 0 0 20px #00ffff; margin-bottom: 10px;">SPACE SHOOTER</h1>
             <h3 style="color: #aaaaaa; margin-bottom: 50px; letter-spacing: 5px;">PROYECTO FINAL</h3>
             ${this.generarBotonHTML('btn-jugar', 'Iniciar Misión')}
             ${this.generarBotonHTML('btn-opciones', 'Opciones')}
         `;
-        document.getElementById('btn-jugar')!.onclick = () => this.ReiniciarJuego();
+        //document.getElementById('btn-jugar')!.onclick = () => this.ReiniciarJuego();
+
+        const btnJugar = document.getElementById('btn-jugar');
+
+        if (btnJugar) {
+            btnJugar.onclick = async () => {
+                try {
+                    if (!document.fullscreenElement) {
+                        await document.documentElement.requestFullscreen();
+                    }
+
+                    await screen.orientation.lock('landscape');
+
+                } catch (error) {
+                    console.error("Error al configurar pantalla:", error);
+                }
+
+                this.ReiniciarJuego();
+            };
+        }
+
+
+
         document.getElementById('btn-opciones')!.onclick = () => this.MostrarOpciones();
 
         const buttons = Array.from(this.uiContainer.querySelectorAll('button')) as HTMLButtonElement[];
@@ -1649,7 +1673,7 @@ export class App {
             
             <div style="display: flex; align-items: center; margin: 10px; background: rgba(0, 255, 255, 0.1); border: 1px solid #00ffff; padding: 10px 20px; border-radius: 5px;">
                 <label style="color: #00ffff; font-size: 20px; font-family: 'Courier New', monospace; width: 280px;">VOLUMEN GENERAL:</label>
-                <input type="range" id="slider-volumen" min="0.0" max="1.0" step="0.05" value="${this.volumenGeneral}" style="width: 200px; cursor: pointer; accent-color: #00ffff;">
+                <input type="rang e" id="slider-volumen" min="0.0" max="1.0" step="0.05" value="${this.volumenGeneral}" style="width: 200px; cursor: pointer; accent-color: #00ffff;">
                 <span id="val-volumen" style="color: #fff; font-family: 'Courier New', monospace; width: 70px; text-align: right; font-size: 20px;">${Math.round(this.volumenGeneral * 100)}%</span>
                 <button id="btn-reset-volumen" title="Restablecer" style="background: none; border: none; color: #ff3333; font-size: 28px; cursor: pointer; margin-left: 15px; text-shadow: 0 0 10px #ff3333; transition: transform 0.2s;" onmouseover="this.style.transform='rotate(-45deg)'" onmouseout="this.style.transform='rotate(0deg)'">⟲</button>
             </div>
