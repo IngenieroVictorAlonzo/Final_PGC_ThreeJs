@@ -1572,7 +1572,7 @@ export class App {
 
     MostrarInicio() {
 
-        // Salir del Pointer Lock solo si está disponible
+        // Salir del Pointer Lock solo si está disponible, para que funcione en iOS.
         if (typeof document.exitPointerLock === 'function') {
             document.exitPointerLock();
         }
